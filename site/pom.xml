@@ -10,6 +10,115 @@
 	<groupId>org.jboss.tools.ws</groupId>
 	<artifactId>ws.site</artifactId>
 	<name>ws.site</name>
-	
+
 	<packaging>eclipse-repository</packaging>
+
+	<profiles>
+		<profile>
+			<id>maven-deps</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.6</version>
+						<executions>
+							<execution>
+								<id>create-full-repo-for-apitools</id>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<phase>verify</phase>
+								<configuration>
+									<outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.6</version>
+						<executions>
+							<execution>
+								<id>cp-debug</id>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<phase>verify</phase>
+								<configuration>
+									<resources>
+										<resource>
+               								<directory>org.eclipse.jdt.debug_3.7.101.v20120725-115645</directory>
+               							</resource>
+									</resources>
+									<outputDirectory>${project.build.directory}/requirements/org.eclipse.jdt.debug_3.7.101.v20120725-115645</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>tycho-deps</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jboss.tools.tycho-plugins</groupId>
+						<artifactId>tycho-dependencies-plugin</artifactId>
+						<version>0.0.1-SNAPSHOT</version>
+						<executions>
+							<execution>
+								<id>create-full-repo-for-apitools</id>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+					
+		<profile>
+			<id>apitools</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho.extras</groupId>
+						<artifactId>tycho-eclipserun-plugin</artifactId>
+						<version>${tychoExtrasVersion}</version>
+						<executions>
+							<execution>
+								<id>api-reports</id>
+								<goals>
+									<goal>eclipse-run</goal>
+								</goals>
+								<phase>verify</phase>
+								<configuration>
+									<appArgLine>-application org.eclipse.ant.core.antRunner	-buildfile build.xml -Dnightly=${project.build.directory}/dependencies -Dbaseline=/home/mistria/jbdevstudio/studio/plugins</appArgLine>
+									<dependencies>
+										<dependency>
+											<artifactId>net.oxbeef.apitools.core</artifactId>
+											<type>eclipse-plugin</type>
+										</dependency>
+									</dependencies>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<repositories>
+				<repository>
+					<id>apitools</id>
+					<layout>p2</layout>
+					<url>file:/home/mistria/git/apitooling/projects/net.oxbeef.apitools.repository/target/repository</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
+
 </project>
