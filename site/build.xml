@@ -1,0 +1,52 @@
+<project name="MyProject" default="dist" basedir=".">
+    <description>
+        simple example build file
+    </description>
+<!-- "nightly" and "baseline" must be set -->
+
+  <!-- set global properties for this build -->
+  <!--property name="eclipse.install.dir" value="/home/rob/apps/eclipse/builds/wtp3.4.1/"/>
+  <property name="baseline" value="${baseline}"/>
+  <property name="nightly" value="${newPlugins}"/-->
+
+  <!--property name="apitooling.root" value="/home/rob/code/github/apitooling"/>
+  <property name="tooling.lib.dir" value="${apitooling.root}/binaries"/>
+  <property name="apitooling.ant.dir" value="/home/rob/code/github/apitooling/antSetup"/>
+  <property name="task.props" value="${apitooling.ant.dir}/api-tasks-custom.properties"/>
+  <property name="reports" value="${apitooling.ant.dir}/output"/>
+  <property name="preferences" value="${apitooling.ant.dir}/"/>
+  <property name="includesFile" value="${apitooling.ant.dir}/"/-->
+
+
+  <!--target name="init">
+    <Create the time stamp>
+    <tstamp/>
+    <taskdef file="${task.props}">
+	    <classpath>
+	    <fileset dir="${eclipse.install.dir}/eclipse/plugins">
+	        <include name="*.jar"/>
+	    </fileset>
+	    <fileset dir="${tooling.lib.dir}">
+	        <include name="*.jar"/>
+	    </fileset>
+	    </classpath>
+    </taskdef>
+  </target-->
+
+  <target name="dist" description="generate the distribution" >
+	<echo message="baseline=${baseline}"/>
+	<echo message="newStuff=${nightly}"/>
+  	<debugbaseline
+		baseline="${nightly}"
+		report="target/baseline-reports"
+		includelist="includes.txt"/>
+	<apianalysis
+		baseline="${baseline}"
+		profile="${nightly}"
+		report="target/api-reports"
+		includelist="includes.txt"
+		preferences="org.eclipse.pde.api.tools.prefs"
+		debug="true"
+	/>
+  </target>
+</project>

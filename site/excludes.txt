@@ -1,0 +1,3 @@
+# list of bundle symbolic names
+# net.oxbeef.my.bundle
+# net.oxbeef.my.bundle2
